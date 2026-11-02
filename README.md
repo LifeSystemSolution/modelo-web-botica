@@ -17,4 +17,4 @@ python -m http.server 8765
 Luego entre a http://localhost:8765.
 
 Pruébalo desde la web
-https://lifesystemsolution.github.io/demo-sistema-botica/
+https://lifesystemsolution.github.io/modelo-web-botica/
