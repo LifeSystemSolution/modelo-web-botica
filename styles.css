@@ -157,7 +157,7 @@ input:focus, select:focus { outline: 3px solid rgba(15, 118, 110, .25); border-c
 .prod .precios { font-size: .88rem; color: var(--primary-d); font-weight: 600; }
 .prod .badge { align-self: flex-start; margin-top: auto; }
 .pos-cart { position: sticky; top: 1rem; }
-.seg-group { display: grid; grid-template-columns: 1fr 1fr; background: #eef1f4; border-radius: 12px; padding: 4px; margin-bottom: 1rem; }
+.seg-group { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;background: #eef1f4; border-radius: 12px; padding: 4px; margin-bottom: 1rem; }
 .seg { border: none; background: none; min-height: 48px; border-radius: 9px; font-weight: 700; color: var(--muted); }
 .seg.on { background: #fff; color: var(--primary-d); box-shadow: var(--shadow); }
 .cart { list-style: none; margin: 0; padding: 0; max-height: 46vh; overflow-y: auto; }

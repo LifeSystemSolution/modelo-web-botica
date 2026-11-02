@@ -108,7 +108,7 @@ const S = {
   busqueda: '',
   carrito: [], tipoDoc: 'Boleta', cobro: null,
   ventas: [], ventaSeq: 0,
-  serieB: 145, serieF: 32, serieNC: 5,
+  serieB: 145, serieF: 32, serieNC: 5, serieNV: 18,
   kardex: [], cierres: [], ultimoCierre: null,
   compraLista: [], compraPre: null,
   gastos: [], periodo: '7',
@@ -207,9 +207,10 @@ const contarAlertas = () => pocoStock().length + porVencer().length;
 
 /* ---------------- Ventas ---------------- */
 const venta = id => S.ventas.find(v => v.id === id);
-const neto = v => v.estado === 'Anulada' ? 0 : round2(v.total - v.devuelto);
+// Una nota de venta canjeada ya se cuenta en la boleta o factura que la reemplaza.
+const neto = v => v.estado === 'Anulada' || v.canje ? 0 : round2(v.total - v.devuelto);
 const ventasHoy = () => S.ventas.filter(v => v.fecha === HOY_ISO);
-const costoVenta = v => v.estado === 'Anulada' ? 0 : v.items.reduce((a, it) => a + (it.cant - it.devueltos) * it.unidades * prod(it.pid).costoU, 0);
+const costoVenta = v => v.estado === 'Anulada' || v.canje ? 0 : v.items.reduce((a, it) => a + (it.cant - it.devueltos) * it.unidades * prod(it.pid).costoU, 0);
 const totalCarrito = () => round2(S.carrito.reduce((a, it) => a + it.precio * it.cant, 0));
 const unidadesEnCarrito = pid => S.carrito.filter(it => it.pid === pid).reduce((a, it) => a + it.unidades * it.cant, 0);
 
@@ -363,7 +364,9 @@ function vVender() {
       <div class="seg-group">
         <button class="seg ${S.tipoDoc === 'Boleta' ? 'on' : ''}" onclick="setDoc('Boleta')">Boleta</button>
         <button class="seg ${S.tipoDoc === 'Factura' ? 'on' : ''}" onclick="setDoc('Factura')">Factura</button>
+        <button class="seg ${S.tipoDoc === 'Nota de venta' ? 'on' : ''}" onclick="setDoc('Nota de venta')">Nota de venta</button>
       </div>
+      ${S.tipoDoc === 'Nota de venta' ? '<p class="note info">Documento interno: no se envía a SUNAT. Luego puede canjearlo por boleta o factura.</p>' : ''}
       <div id="carrito"></div>
     </aside>
   </div>`;
@@ -449,7 +452,7 @@ function abrirCobro() {
   if (!cajaActual()) { toast('Primero abra la caja', 'error'); return abrirCajaModal(); }
   const total = totalCarrito();
   S.cobro = { metodo: 'Efectivo', cliente: null };
-  const esF = S.tipoDoc === 'Factura', pideDni = !esF && total > 700;
+  const esF = S.tipoDoc === 'Factura', pideDni = S.tipoDoc === 'Boleta' && total > 700;
   const tipoDocCli = esF ? 'RUC' : 'DNI';
   const rapidos = [10, 20, 50, 100, 200].filter(x => x >= total);
   modal(`<h2>Cobrar ${S.tipoDoc.toLowerCase()}</h2>
@@ -506,13 +509,14 @@ function actualizarVuelto() {
 function emitir() {
   const total = totalCarrito(), c = S.cobro, esF = S.tipoDoc === 'Factura';
   if (esF && !c.cliente) return toast('Escriba el RUC y pulse Buscar', 'error');
-  if (!esF && total > 700 && !c.cliente) return toast('Escriba el DNI del cliente y pulse Buscar', 'error');
+  if (S.tipoDoc === 'Boleta' && total > 700 && !c.cliente) return toast('Escriba el DNI del cliente y pulse Buscar', 'error');
   let recibido = total;
   if (c.metodo === 'Efectivo') {
     recibido = parseFloat($('#recibido').value);
     if (!(recibido >= total)) return toast('El monto recibido es menor al total', 'error');
   }
-  const numero = esF ? `F001-${pad(++S.serieF)}` : `B001-${pad(++S.serieB)}`;
+  const esNV = S.tipoDoc === 'Nota de venta';
+  const numero = esF ? `F001-${pad(++S.serieF)}` : esNV ? `NV01-${pad(++S.serieNV)}` : `B001-${pad(++S.serieB)}`;
   const v = {
     id: ++S.ventaSeq, doc: S.tipoDoc, numero, fecha: HOY_ISO, hora: horaAhora(),
     cliente: c.cliente || { tipo: '', num: '', nombre: 'Clientes varios' },
@@ -526,8 +530,9 @@ function emitir() {
   closeModal();
   render();
   verTicket(v.id, true);
-  toast(`${numero} enviado a SUNAT: aceptado (simulado)`);
+  toast(esNV ? `${numero} registrada (no se envía a SUNAT)` : `${numero} enviado a SUNAT: aceptado (simulado)`);
 }
+const esNota = v => v.doc === 'Nota de venta';
 
 /* ---------------- Ticket ---------------- */
 function qrHTML(seed) {
@@ -547,7 +552,7 @@ function ticketHTML(v) {
     ${v.estado === 'Anulada' ? '<div class="sello">ANULADA</div>' : ''}
     <div class="c b grande">BOTICA DEMO</div>
     <div class="c">RUC 20000000001<br>Av. Principal 123, Lima</div><hr>
-    <div class="c b">${v.doc.toUpperCase()} DE VENTA ELECTRÓNICA<br>${v.numero}</div><hr>
+    <div class="c b">${esNota(v) ? 'NOTA DE VENTA' : v.doc.toUpperCase() + ' DE VENTA ELECTRÓNICA'}<br>${v.numero}</div><hr>
     <div>Fecha: ${fmtFecha(v.fecha)} ${v.hora}</div>
     <div>Cliente: ${esc(v.cliente.nombre)}</div>
     ${v.cliente.num ? `<div>${v.cliente.tipo}: ${v.cliente.num}</div>` : ''}
@@ -555,14 +560,16 @@ function ticketHTML(v) {
     ${tiene(3) ? `<div>Atendió: ${esc(v.usuario)}</div>` : ''}<hr>
     ${v.items.map(it => `<div>${esc(it.nombre)}</div><div class="l"><span>${it.cant} ${it.pres} x ${it.precio.toFixed(2)}</span><span>${(it.cant * it.precio).toFixed(2)}</span></div>`).join('')}
     <hr>
-    <div class="l"><span>Op. gravada</span><span>${grav.toFixed(2)}</span></div>
-    <div class="l"><span>IGV 18%</span><span>${igv.toFixed(2)}</span></div>
+    ${esNota(v) ? '' : `<div class="l"><span>Op. gravada</span><span>${grav.toFixed(2)}</span></div>
+    <div class="l"><span>IGV 18%</span><span>${igv.toFixed(2)}</span></div>`}
     <div class="l b grande"><span>TOTAL S/</span><span>${v.total.toFixed(2)}</span></div><hr>
     <div class="l"><span>Pago: ${v.metodo}</span><span>${v.recibido.toFixed(2)}</span></div>
     ${v.metodo === 'Efectivo' ? `<div class="l"><span>Vuelto</span><span>${v.vuelto.toFixed(2)}</span></div>` : ''}
     ${v.nc ? `<div class="l"><span>Nota de crédito ${v.nc}</span><span>-${v.devuelto.toFixed(2)}</span></div>` : ''}
-    ${qrHTML(v.id * 7919)}
-    <div class="c">Representación impresa de la ${v.doc} de Venta Electrónica. Consulte en www.sunat.gob.pe</div>
+    ${v.canje ? `<div>Canjeada por ${v.canje}</div>` : ''}
+    ${esNota(v)
+      ? '<hr><div class="c">Documento interno, no es comprobante de pago. Si lo necesita, pida su boleta o factura.</div>'
+      : `${qrHTML(v.id * 7919)}<div class="c">Representación impresa de la ${v.doc} de Venta Electrónica. Consulte en www.sunat.gob.pe</div>`}
     <div class="c b" style="margin-top:.4rem">¡Gracias por su compra!</div>
   </div>`;
 }
@@ -579,7 +586,9 @@ function verTicket(id, nuevo = false) {
    ===================================================================== */
 function estadoBadge(v) {
   if (v.estado === 'Anulada') return '<span class="badge danger">Anulada</span>';
-  if (v.nc) return `<span class="badge warn">Con nota de crédito ${v.nc}</span>`;
+  if (v.canje) return `<span class="badge ok">Canjeada por ${v.canje}</span>`;
+  if (v.nc) return `<span class="badge warn">${esNota(v) ? 'Con devolución' : 'Con nota de crédito ' + v.nc}</span>`;
+  if (esNota(v)) return '<span class="badge muted">Interna (no va a SUNAT)</span>';
   return '<span class="badge ok">Aceptado por SUNAT</span>';
 }
 function vVentas() {
@@ -597,8 +606,38 @@ function vVentas() {
         <td>${esc(v.cliente.nombre)}</td>${tiene(3) ? `<td>${esc(v.usuario)}</td>` : ''}<td>${v.metodo}</td>
         <td class="num"><strong>${soles(v.total)}</strong></td><td>${estadoBadge(v)}</td>
         <td><div class="acciones"><button class="btn btn-sm" onclick="verTicket(${v.id})">Reimprimir</button>
-          ${v.estado !== 'Anulada' ? `<button class="btn btn-sm" onclick="anularModal(${v.id})">Anular o corregir</button>` : ''}</div></td>
+          ${esNota(v) && v.estado !== 'Anulada' && !v.canje ? `<button class="btn btn-sm" onclick="canjearModal(${v.id})">Canjear</button>` : ''}
+          ${v.estado !== 'Anulada' && !v.canje ? `<button class="btn btn-sm" onclick="anularModal(${v.id})">Anular o corregir</button>` : ''}</div></td>
       </tr>`).join('')}</tbody></table></div>`;
+}
+function canjearModal(id) {
+  const v = venta(id);
+  S.cobro = { cliente: null };
+  modal(`<h2>Canjear nota de venta</h2><p class="muted">${v.numero} · ${soles(neto(v))}</p>
+    <p>Se emite una boleta o factura con los mismos productos. No se cobra de nuevo ni se descuenta stock otra vez.</p>
+    <label class="lbl" for="docnum">DNI o RUC del cliente</label>
+    <div class="row"><input id="docnum" type="text" inputmode="numeric" maxlength="11" placeholder="8 dígitos (DNI) u 11 (RUC)" style="flex:1;width:auto">
+      <button class="btn" onclick="buscarCliente($('#docnum').value.trim().length === 11 ? 'RUC' : 'DNI')">Buscar</button></div>
+    <div id="cli-res"></div>
+    <div class="modal-actions"><button class="btn" onclick="canjear(${id}, 'Boleta')">Canjear por boleta</button>
+    <button class="btn btn-primary" onclick="canjear(${id}, 'Factura')">Canjear por factura</button></div>`);
+}
+function canjear(id, doc) {
+  const v = venta(id), c = S.cobro.cliente, total = neto(v);
+  if (doc === 'Factura' && (!c || c.tipo !== 'RUC')) return toast('Para factura escriba el RUC y pulse Buscar', 'error');
+  if (doc === 'Boleta' && total > 700 && !c) return toast('Pasa de S/ 700: escriba el DNI y pulse Buscar', 'error');
+  const numero = doc === 'Factura' ? `F001-${pad(++S.serieF)}` : `B001-${pad(++S.serieB)}`;
+  const nueva = {
+    ...v, id: ++S.ventaSeq, doc, numero, hora: horaAhora(), total, devuelto: 0, nc: null, canje: null,
+    cliente: c || { tipo: '', num: '', nombre: 'Clientes varios' },
+    items: v.items.filter(it => it.cant > it.devueltos).map(it => ({ ...it, cant: it.cant - it.devueltos, devueltos: 0 })),
+    recibido: total, vuelto: 0, usuario: S.usuario.nombre,
+  };
+  v.canje = numero;
+  S.ventas.unshift(nueva);
+  closeModal(); render();
+  verTicket(nueva.id);
+  toast(`${v.numero} canjeada por ${numero}. Enviado a SUNAT (simulado).`);
 }
 function anularModal(id) {
   const v = venta(id);
@@ -617,10 +656,10 @@ function anularModal(id) {
 }
 function confirmarAnular(id) {
   const v = venta(id);
-  modal(`<h2>¿Anular ${v.numero}?</h2><p>Se avisará a SUNAT que este comprobante queda sin efecto${tiene(2) ? ' y los productos vuelven al stock' : ''}.</p>
+  modal(`<h2>¿Anular ${v.numero}?</h2><p>${esNota(v) ? 'La nota de venta queda sin efecto' : 'Se avisará a SUNAT que este comprobante queda sin efecto'}${tiene(2) ? ' y los productos vuelven al stock' : ''}.</p>
     <p>Devuelva al cliente <strong>${soles(neto(v))}</strong>.</p>
     <div class="modal-actions"><button class="btn" onclick="anularModal(${id})">Volver</button>
-    <button class="btn btn-danger" onclick="anular(${id}); closeModal(); render(); toast('Comprobante anulado. Aviso enviado a SUNAT (simulado).')">Sí, anular</button></div>`);
+    <button class="btn btn-danger" onclick="anular(${id}); closeModal(); render(); toast('${esNota(v) ? 'Nota de venta anulada.' : 'Comprobante anulado. Aviso enviado a SUNAT (simulado).'}')">Sí, anular</button></div>`);
 }
 function anular(id) {
   const v = venta(id);
@@ -648,7 +687,7 @@ function devolver(id) {
     monto += n * it.precio; return n;
   });
   if (!monto) return toast('Indique al menos un producto a devolver', 'error');
-  v.nc = `${v.doc === 'Factura' ? 'FC01' : 'BC01'}-${pad(++S.serieNC)}`;
+  v.nc = esNota(v) ? 'devolución interna' : `${v.doc === 'Factura' ? 'FC01' : 'BC01'}-${pad(++S.serieNC)}`;
   v.items.forEach((it, k) => {
     if (!cant[k]) return;
     it.devueltos += cant[k];
@@ -656,7 +695,7 @@ function devolver(id) {
   });
   v.devuelto = round2(v.devuelto + monto);
   closeModal(); render();
-  toast(`Nota de crédito ${v.nc} emitida (simulado). Devuelva ${soles(monto)} al cliente.`);
+  toast(esNota(v) ? `Devolución registrada. Devuelva ${soles(monto)} al cliente.` : `Nota de crédito ${v.nc} emitida (simulado). Devuelva ${soles(monto)} al cliente.`);
 }
 function corregirDatos(id) {
   const v = venta(id);
