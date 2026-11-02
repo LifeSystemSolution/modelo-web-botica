@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistema para Boticas · Demos</title>
+  <meta name="description" content="Pruebe las 3 versiones del sistema para boticas: Básico, Control y Completo.">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .hero { background: linear-gradient(135deg, #0f766e, #115e59); color: #fff; padding: 3rem 1.2rem 6rem; text-align: center; }
+    .hero h1 { font-size: clamp(1.9rem, 4vw, 2.7rem); margin-bottom: .6rem; }
+    .hero p { font-size: 1.15rem; opacity: .92; max-width: 640px; margin: 0 auto; }
+    .hero .logo { margin: 0 auto 1rem; width: 56px; height: 56px; font-size: 1.9rem; background: rgba(255,255,255,.18); }
+    .planes { max-width: 1120px; margin: -4rem auto 0; padding: 0 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
+    .plan { background: #fff; border-radius: 18px; box-shadow: var(--shadow); padding: 1.6rem; display: flex; flex-direction: column; border-top: 6px solid var(--c); }
+    .plan h2 { color: var(--c); font-size: 1.6rem; margin-bottom: .2rem; }
+    .plan .para { color: var(--muted); min-height: 3em; }
+    .plan ul { list-style: none; padding: 0; margin: .4rem 0 1.4rem; display: grid; gap: .45rem; }
+    .plan li { display: flex; gap: .55rem; align-items: flex-start; }
+    .plan li::before { content: "✓"; color: var(--c); font-weight: 800; }
+    .plan li.mas { font-weight: 700; }
+    .plan li.mas::before { content: "+"; }
+    .plan .btn { margin-top: auto; background: var(--c); border-color: var(--c); color: #fff; font-size: 1.15rem; min-height: 58px; }
+    .plan .btn:hover { filter: brightness(.92); }
+    .plan .ideal { font-size: .9rem; background: var(--cl); color: var(--c); border-radius: 10px; padding: .6rem .8rem; margin-bottom: 1rem; font-weight: 600; }
+    .b { --c: var(--primary); --cl: var(--primary-l); }
+    .c { --c: var(--control); --cl: var(--control-l); }
+    .k { --c: var(--completo); --cl: var(--completo-l); }
+    .como { max-width: 1120px; margin: 2.5rem auto; padding: 0 1rem; }
+    .pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .paso { background: #fff; border-radius: 14px; padding: 1.1rem 1.2rem; box-shadow: var(--shadow); }
+    .paso b { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--primary-l); color: var(--primary-d); margin-bottom: .4rem; }
+    footer { text-align: center; color: var(--muted); padding: 2rem 1rem 3rem; font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="logo">✚</div>
+    <h1>Sistema para Boticas</h1>
+    <p>Venda rápido, emita boletas y facturas electrónicas y tenga su botica bajo control. Elija una versión y pruébela ahora, sin instalar nada.</p>
+  </header>
+
+  <main class="planes">
+    <article class="plan b">
+      <h2>Básico</h2>
+      <p class="para">Para vender y emitir comprobantes rápido, sin hacerlos a mano.</p>
+      <div class="ideal">Ideal si por ahora solo necesita vender y facturar.</div>
+      <ul>
+        <li>Buscar productos por nombre o con lector</li>
+        <li>Vender por caja, blíster o unidad</li>
+        <li>Boletas y facturas electrónicas</li>
+        <li>Efectivo, Yape, Plin o tarjeta, con vuelto</li>
+        <li>Anular o corregir una venta</li>
+        <li>Ventas del día y del mes</li>
+        <li>Abrir y cerrar caja</li>
+      </ul>
+      <a class="btn" href="app.html?plan=basico">Probar Básico</a>
+    </article>
+
+    <article class="plan c">
+      <h2>Control</h2>
+      <p class="para">Además de vender, sepa qué tiene, qué se acaba y qué está por vencer.</p>
+      <div class="ideal">Ideal si quiere controlar su stock y evitar pérdidas por vencimiento.</div>
+      <ul>
+        <li class="mas">Todo lo del Básico</li>
+        <li>Stock de cada producto</li>
+        <li>Descuento automático al vender</li>
+        <li>Registro de compras con lote y vencimiento</li>
+        <li>Alertas de poco stock y por vencer</li>
+        <li>Kardex: entradas y salidas</li>
+      </ul>
+      <a class="btn" href="app.html?plan=control">Probar Control</a>
+    </article>
+
+    <article class="plan k">
+      <h2>Completo</h2>
+      <p class="para">Administre todo desde un solo lugar y sepa cuánto gana.</p>
+      <div class="ideal">Ideal si trabaja con personal o quiere ver ganancias.</div>
+      <ul>
+        <li class="mas">Todo lo del Control</li>
+        <li>Usuarios y permisos por trabajador</li>
+        <li>Caja y ventas por usuario</li>
+        <li>Gastos, ganancias y margen por producto</li>
+        <li>Sugerencias de compra y proveedores</li>
+        <li>Reportes desde el celular</li>
+        <li>Información para contador y DIGEMID</li>
+      </ul>
+      <a class="btn" href="app.html?plan=completo">Probar Completo</a>
+    </article>
+  </main>
+
+  <section class="como">
+    <h2>Cómo probar la demo</h2>
+    <div class="pasos">
+      <div class="paso"><b>1</b><p>Elija un plan arriba y pulse <strong>Probar</strong>.</p></div>
+      <div class="paso"><b>2</b><p>Abra la caja con el monto que aparece.</p></div>
+      <div class="paso"><b>3</b><p>Busque un producto, por ejemplo <strong>paracetamol</strong>, y elija caja, blíster o unidad.</p></div>
+      <div class="paso"><b>4</b><p>Pulse <strong>Cobrar</strong>, elija la forma de pago y emita la boleta.</p></div>
+    </div>
+    <p class="hint">Es una demostración con datos de prueba: no emite comprobantes reales ni se conecta a SUNAT. Al recargar la página todo vuelve a empezar. Se ve mejor en una computadora, que es donde se usará en la botica.</p>
+  </section>
+
+  <footer>LifeSystem Solutions · Sistema para Boticas</footer>
+</body>
+</html>
