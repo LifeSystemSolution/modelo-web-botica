@@ -1,106 +1,149 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-PE" data-theme="light">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sistema para Boticas · Demos</title>
-  <meta name="description" content="Pruebe las 3 versiones del sistema para boticas: Básico, Control y Completo.">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .hero { background: linear-gradient(135deg, #0f766e, #115e59); color: #fff; padding: 3rem 1.2rem 6rem; text-align: center; }
-    .hero h1 { font-size: clamp(1.9rem, 4vw, 2.7rem); margin-bottom: .6rem; }
-    .hero p { font-size: 1.15rem; opacity: .92; max-width: 640px; margin: 0 auto; }
-    .hero .logo { margin: 0 auto 1rem; width: 56px; height: 56px; font-size: 1.9rem; background: rgba(255,255,255,.18); }
-    .planes { max-width: 1120px; margin: -4rem auto 0; padding: 0 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
-    .plan { background: #fff; border-radius: 18px; box-shadow: var(--shadow); padding: 1.6rem; display: flex; flex-direction: column; border-top: 6px solid var(--c); }
-    .plan h2 { color: var(--c); font-size: 1.6rem; margin-bottom: .2rem; }
-    .plan .para { color: var(--muted); min-height: 3em; }
-    .plan ul { list-style: none; padding: 0; margin: .4rem 0 1.4rem; display: grid; gap: .45rem; }
-    .plan li { display: flex; gap: .55rem; align-items: flex-start; }
-    .plan li::before { content: "✓"; color: var(--c); font-weight: 800; }
-    .plan li.mas { font-weight: 700; }
-    .plan li.mas::before { content: "+"; }
-    .plan .btn { margin-top: auto; background: var(--c); border-color: var(--c); color: #fff; font-size: 1.15rem; min-height: 58px; }
-    .plan .btn:hover { filter: brightness(.92); }
-    .plan .ideal { font-size: .9rem; background: var(--cl); color: var(--c); border-radius: 10px; padding: .6rem .8rem; margin-bottom: 1rem; font-weight: 600; }
-    .b { --c: var(--primary); --cl: var(--primary-l); }
-    .c { --c: var(--control); --cl: var(--control-l); }
-    .k { --c: var(--completo); --cl: var(--completo-l); }
-    .como { max-width: 1120px; margin: 2.5rem auto; padding: 0 1rem; }
-    .pasos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-    .paso { background: #fff; border-radius: 14px; padding: 1.1rem 1.2rem; box-shadow: var(--shadow); }
-    .paso b { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: var(--primary-l); color: var(--primary-d); margin-bottom: .4rem; }
-    footer { text-align: center; color: var(--muted); padding: 2rem 1rem 3rem; font-size: .9rem; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>LifeFarma · Sistema para boticas y farmacias</title>
+  <meta name="description" content="Sistema para boticas en Perú: caja por caja, blíster o unidad, boletas y facturas, lotes y vencimientos, recetas y ganancia real. Demo de LifeSystem Solutions.">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23e30613'/%3E%3Cpath d='M13 7.5h6v5.5h5.5v6H19v5.5h-6V19H7.5v-6H13z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css?v=3">
+  <link rel="stylesheet" href="css/app.css?v=3">
+  <link rel="stylesheet" href="css/landing.css?v=3">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('lifefarma-tema')||'light'}catch(e){}</script>
 </head>
-<body>
-  <header class="hero">
-    <div class="logo">✚</div>
-    <h1>Sistema para Boticas</h1>
-    <p>Venda rápido, emita boletas y facturas electrónicas y tenga su botica bajo control. Elija una versión y pruébela ahora, sin instalar nada.</p>
+<body class="landing">
+  <header class="l-top">
+    <div class="l-wrap l-top-in">
+      <a class="marca" href="index.html" id="l-logo" aria-label="LifeFarma, inicio"></a>
+      <nav class="l-nav" aria-label="Secciones">
+        <a href="#como">Cómo funciona</a>
+        <a href="#planes">Planes</a>
+        <a href="#calculadora">Ahorro</a>
+        <a href="web.html">Web de ejemplo</a>
+      </nav>
+      <button type="button" class="btn btn-ghost btn-icon btn-sm" id="btn-tema" aria-label="Cambiar tema"></button>
+      <a class="btn btn-dark btn-sm" href="#probar">Probar el demo</a>
+    </div>
   </header>
 
-  <main class="planes">
-    <article class="plan b">
-      <h2>Básico</h2>
-      <p class="para">Para vender y emitir comprobantes rápido, sin hacerlos a mano.</p>
-      <div class="ideal">Ideal si por ahora solo necesita vender y facturar.</div>
-      <ul>
-        <li>Buscar productos por nombre o con lector</li>
-        <li>Vender por caja, blíster o unidad</li>
-        <li>Boletas y facturas electrónicas</li>
-        <li>Notas de venta, canjeables por boleta o factura</li>
-        <li>Efectivo, Yape, Plin o tarjeta, con vuelto</li>
-        <li>Anular o corregir una venta</li>
-        <li>Ventas del día y del mes</li>
-        <li>Abrir y cerrar caja</li>
-      </ul>
-      <a class="btn" href="app.html?plan=basico">Probar Básico</a>
-    </article>
+  <main>
+    <section class="l-hero">
+      <div class="l-wrap l-hero-in">
+        <div class="l-hero-t">
+          <h1>Deje de botar plata en productos vencidos.</h1>
+          <p class="l-lead">LifeFarma es el sistema para boticas y farmacias en Perú. Vende por caja, blíster o unidad, emite boletas y facturas, y cada lote tiene un puntaje que avisa cuántas unidades no se venderán antes de vencer, cuánto dinero es y qué hacer.</p>
+          <div class="fila">
+            <a class="btn btn-primary btn-lg" href="app.html?plan=completo&demo=cajero#/venta?sim=1">Probar el sistema</a>
+            <a class="btn btn-line btn-lg" href="web.html">Ver la web para sus clientes</a>
+          </div>
+          <p class="l-nota">Demo con datos ficticios de una botica inventada. No necesita registrarse.</p>
+        </div>
+        <div class="l-widget caja" id="widget" aria-label="Simulador del riesgo por vencimiento"></div>
+      </div>
+    </section>
 
-    <article class="plan c">
-      <h2>Control</h2>
-      <p class="para">Además de vender, sepa qué tiene, qué se acaba y qué está por vencer.</p>
-      <div class="ideal">Ideal si quiere controlar su stock y evitar pérdidas por vencimiento.</div>
-      <ul>
-        <li class="mas">Todo lo del Básico</li>
-        <li>Stock de cada producto</li>
-        <li>Descuento automático al vender</li>
-        <li>Registro de compras con lote y vencimiento</li>
-        <li>Alertas de poco stock y por vencer</li>
-        <li>Kardex: entradas y salidas</li>
-      </ul>
-      <a class="btn" href="app.html?plan=control">Probar Control</a>
-    </article>
+    <section class="l-sec l-dolor">
+      <div class="l-wrap l-dos">
+        <h2>En una botica, la ganancia se va por donde nadie mira.</h2>
+        <ul class="l-dolores">
+          <li><b>El jarabe se vence en el estante</b> porque se compró de más, y nadie lo notó hasta que ya no se podía canjear.</li>
+          <li><b>El stock no cuadra:</b> se vende por blíster y por unidad, y al final del mes faltan pastillas que nadie sabe dónde quedaron.</li>
+          <li><b>Las recetas se anotan en un cuaderno</b>, si se anotan, y los antibióticos salen sin registro.</li>
+          <li><b>No se sabe cuánto queda de verdad</b> después de pagar a la droguería, el alquiler y los sueldos.</li>
+        </ul>
+      </div>
+    </section>
 
-    <article class="plan k">
-      <h2>Completo</h2>
-      <p class="para">Administre todo desde un solo lugar y sepa cuánto gana.</p>
-      <div class="ideal">Ideal si trabaja con personal o quiere ver ganancias.</div>
-      <ul>
-        <li class="mas">Todo lo del Control</li>
-        <li>Usuarios y permisos por trabajador</li>
-        <li>Caja y ventas por usuario</li>
-        <li>Gastos, ganancias y margen por producto</li>
-        <li>Sugerencias de compra y proveedores</li>
-        <li>Reportes desde el celular</li>
-        <li>Información para contador y DIGEMID</li>
-      </ul>
-      <a class="btn" href="app.html?plan=completo">Probar Completo</a>
-    </article>
+    <section class="l-sec" id="como">
+      <div class="l-wrap">
+        <h2 class="l-h2">Cómo funciona un día con LifeFarma</h2>
+        <p class="l-sub">Capturas reales del sistema de demostración.</p>
+        <div class="l-pasos">
+          <figure class="l-paso">
+            <img src="img/capturas/venta.png" alt="Caja rápida con productos por caja, blíster o unidad y el carrito con boleta, IGV y vuelto" loading="lazy" width="1440" height="900">
+            <figcaption><b>Vender sin pensar en el stock.</b> Busca por nombre o pasa el código de barras, elige caja, blíster o unidad y cobra con efectivo, Yape, Plin o tarjeta. El sistema descuenta del lote que vence primero y, si es antibiótico, pide la receta.</figcaption>
+          </figure>
+          <figure class="l-paso">
+            <img src="img/capturas/vencimientos.png" alt="Lista de lotes en riesgo de vencer con unidades, dinero en riesgo y qué hacer" loading="lazy" width="1440" height="900">
+            <figcaption><b>Lo que se va a vencer, con tiempo para actuar.</b> Cada lote tiene un puntaje de 0 a 100: cercanía al vencimiento, unidades que no se venderán a tiempo, dinero en juego y rotación. Y dice qué hacer: vender primero, pedir canje o retirarlo.</figcaption>
+          </figure>
+          <figure class="l-paso">
+            <img src="img/capturas/pedido.png" alt="Pedido sugerido agrupado por droguería con cantidades y ahorro" loading="lazy" width="1440" height="900">
+            <figcaption><b>Comprar lo justo, a la droguería más barata.</b> El pedido sugerido calcula cuántas cajas pedir según lo que se vende cada día y compara el costo entre droguerías.</figcaption>
+          </figure>
+          <figure class="l-paso">
+            <img src="img/capturas/reportes.png" alt="Reportes con ventas por día, por categoría y ganancia neta con su fórmula" loading="lazy" width="1440" height="900">
+            <figcaption><b>La ganancia real, no la de la caja.</b> Ventas menos el costo de cada lote, menos gastos y mermas. Por día, categoría, hora y producto, exportable a Excel.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="l-sec l-planes-sec" id="planes">
+      <div class="l-wrap">
+        <h2 class="l-h2">Tres planes, o arme el suyo</h2>
+        <p class="l-sub">Cada plan se puede probar completo ahora mismo. La cotización depende de sus cajas y usuarios, por eso la conversamos por WhatsApp.</p>
+        <div class="l-planes" id="planes-lista"></div>
+        <div class="l-arma caja" id="arma"></div>
+      </div>
+    </section>
+
+    <section class="l-sec" id="calculadora">
+      <div class="l-wrap l-dos">
+        <div>
+          <h2>¿Cuánto se le vence al año?</h2>
+          <p class="l-sub">Calculadora de estimación. Cambie los valores por los de su botica.</p>
+          <div class="l-calc" id="calc"></div>
+        </div>
+        <div class="l-calc-res caja" id="calc-res" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="l-sec l-probar" id="probar">
+      <div class="l-wrap">
+        <h2 class="l-h2">Pruébelo con el rol que le interesa</h2>
+        <div class="l-plan-sel" role="radiogroup" aria-label="Plan para probar" id="plan-sel"></div>
+        <div class="l-roles" id="roles"></div>
+        <p class="l-sub">Enlaces útiles para presentar: <a href="app.html?demo=cajero&plan=completo#/venta?sim=1">atender a una clienta con receta</a> · <a href="app.html?demo=qf&plan=completo#/vencimientos?id=primero">abrir el lote más urgente</a> · <a href="web.html#catalogo">pedir como cliente</a></p>
+      </div>
+    </section>
+
+    <section class="l-sec l-honesto">
+      <div class="l-wrap l-dos">
+        <h2>Qué es real y qué es simulado en este demo</h2>
+        <ul class="l-lista">
+          <li><b>Real:</b> la venta por presentación con descuento por lote (FEFO), el IGV, el vuelto, la receta obligatoria, el puntaje por vencimiento, el pedido sugerido, la caja con arqueo, el kardex, los reportes y la exportación a Excel.</li>
+          <li><b>Simulado:</b> el envío de boletas y facturas a SUNAT, la consulta de DNI en RENIEC y de RUC en SUNAT, el cobro con tarjeta y el envío de pedidos por WhatsApp.</li>
+          <li><b>Ficticio:</b> la botica LifeFarma, su químico farmacéutico, clientes, médicos, droguerías, DNI, RUC y teléfonos. Los datos viven solo en su navegador y se regeneran cada día.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="l-sec l-cierre">
+      <div class="l-wrap">
+        <h2>¿Quiere verlo con los productos de su botica?</h2>
+        <p>Le mostramos el sistema en una llamada de 15 minutos y cargamos su catálogo y sus precios.</p>
+        <a class="btn btn-primary btn-lg" id="wa-cierre" target="_blank" rel="noopener" href="#">Escribir por WhatsApp</a>
+      </div>
+    </section>
   </main>
 
-  <section class="como">
-    <h2>Cómo probar la demo</h2>
-    <div class="pasos">
-      <div class="paso"><b>1</b><p>Elija un plan arriba y pulse <strong>Probar</strong>.</p></div>
-      <div class="paso"><b>2</b><p>Abra la caja con el monto que aparece.</p></div>
-      <div class="paso"><b>3</b><p>Busque un producto, por ejemplo <strong>paracetamol</strong>, y elija caja, blíster o unidad.</p></div>
-      <div class="paso"><b>4</b><p>Pulse <strong>Cobrar</strong>, elija la forma de pago y emita la boleta.</p></div>
+  <footer class="l-pie">
+    <div class="l-wrap l-pie-in">
+      <span>LifeFarma es un demo de <b>LifeSystem Solutions</b>. Botica y datos ficticios.</span>
+      <a href="web.html">Web de ejemplo</a>
+      <a href="app.html">Entrar al sistema</a>
     </div>
-    <p class="hint">Es una demostración con datos de prueba: no emite comprobantes reales ni se conecta a SUNAT. Al recargar la página todo vuelve a empezar. Se ve mejor en una computadora, que es donde se usará en la botica.</p>
-  </section>
+  </footer>
 
-  <footer>LifeSystem Solutions · Sistema para Boticas</footer>
+  <script src="js/icons.js?v=3"></script>
+  <script src="js/motor.js?v=3"></script>
+  <script src="js/planes.js?v=3"></script>
+  <script src="js/ui.js?v=3"></script>
+  <script src="js/landing.js?v=3"></script>
 </body>
 </html>

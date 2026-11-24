@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es-PE" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Botica LifeFarma · Tu botica de barrio en San Martín de Porres</title>
+  <meta name="description" content="Web de ejemplo de una botica ficticia: busca medicamentos, mira si hay stock, arma tu pedido y envíalo por WhatsApp. Hecha por LifeSystem Solutions.">
+  <meta name="theme-color" content="#0b7a4b">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230b7a4b'/%3E%3Cpath d='M13 7.5h6v5.5h5.5v6H19v5.5h-6V19H7.5v-6H13z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css?v=3">
+  <link rel="stylesheet" href="css/web.css?v=3">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('lifefarma-tema')||'light'}catch(e){}</script>
+</head>
+<body class="web">
+  <p class="w-demo">Web de ejemplo hecha por LifeSystem Solutions · botica y datos ficticios · <a href="index.html#planes">Ver planes del sistema</a></p>
+  <header class="w-top">
+    <div class="w-wrap w-top-in">
+      <a class="w-marca" href="web.html" aria-label="Botica LifeFarma, inicio"><span class="w-logo" aria-hidden="true"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="9" fill="currentColor"/><path d="M13 7.5h6v5.5h5.5v6H19v5.5h-6V19H7.5v-6H13z" fill="#fff"/></svg></span><span>Botica <b>LifeFarma</b></span></a>
+      <nav class="w-nav" aria-label="Secciones">
+        <a href="#catalogo">Productos</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#ubicacion">Ubicación</a>
+      </nav>
+      <button type="button" class="btn btn-ghost btn-icon btn-sm" id="btn-tema" aria-label="Cambiar tema"></button>
+      <a class="w-ingresar" href="app.html" title="Acceso para el personal de la botica"><span id="w-lock"></span><span>Ingresar<span class="hide-s"> al sistema</span></span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="w-hero">
+      <div class="w-wrap w-hero-in">
+        <div>
+          <h1>Tu botica de barrio, con químico farmacéutico todo el día.</h1>
+          <p class="w-lead">Busca tu medicamento, mira si lo tenemos y arma tu pedido. Lo recoges en la botica o te lo llevamos si estás cerca.</p>
+          <div class="w-datos"><span id="w-horario"></span><span id="w-dir"></span></div>
+        </div>
+        <div class="w-hero-ill" id="w-hero-ill" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="w-sec" id="catalogo">
+      <div class="w-wrap w-cat">
+        <div>
+          <h2>¿Qué estás buscando?</h2>
+          <label class="w-buscar"><span id="ic-buscar"></span><input type="search" id="buscar" placeholder="Paracetamol, jarabe para la tos, pañales…" autocomplete="off" aria-label="Buscar producto"></label>
+          <div class="w-chips" id="cats"></div>
+          <div class="w-prods" id="prods" aria-live="polite"></div>
+        </div>
+        <aside class="w-pedido" id="pedido" aria-label="Tu pedido"></aside>
+      </div>
+    </section>
+
+    <section class="w-sec w-serv" id="servicios">
+      <div class="w-wrap">
+        <h2>En la botica también</h2>
+        <div class="w-servs">
+          <div><h3>Orientación del químico farmacéutico</h3><p>Te explicamos cómo tomar tu medicamento y si puedes combinarlo con lo que ya tomas.</p></div>
+          <div><h3>Medición de presión</h3><p>Sin costo, en el mostrador. Útil si llevas control de presión alta.</p></div>
+          <div><h3>Delivery en la zona</h3><p>A San Martín de Porres y Los Olivos, pedidos desde S/ 20. Pagas al recibir con efectivo, Yape o Plin.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="w-sec w-faq" id="ubicacion">
+      <div class="w-wrap w-dos">
+        <div>
+          <h2>Dónde estamos</h2>
+          <p class="w-sub" id="w-dir2"></p>
+          <p class="w-sub" id="w-horario2"></p>
+          <p class="w-sub" id="w-qf"></p>
+        </div>
+        <div>
+          <details><summary>¿Venden antibióticos sin receta?</summary><p>No. Los antibióticos y algunos medicamentos para la presión o la diabetes se venden con receta médica. Tráela al recoger tu pedido.</p></details>
+          <details><summary>¿Cómo pago mi pedido?</summary><p>En la botica con efectivo, Yape, Plin o tarjeta. En delivery, al recibir, con efectivo, Yape o Plin.</p></details>
+          <details><summary>¿Me dan boleta o factura?</summary><p>Sí, boleta o factura electrónica. Para factura necesitamos tu RUC.</p></details>
+          <details><summary>¿Puedo comprar por blíster o por unidad?</summary><p>Sí. Las tabletas y cápsulas se venden por caja, por blíster de 10 o por unidad.</p></details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="w-pie">
+    <div class="w-wrap w-pie-in">
+      <span id="w-razon"></span>
+      <a href="#catalogo">Productos</a>
+      <a href="app.html">Ingresar al sistema</a>
+    </div>
+  </footer>
+
+  <script src="js/icons.js?v=3"></script>
+  <script src="js/motor.js?v=3"></script>
+  <script src="js/planes.js?v=3"></script>
+  <script src="js/seed.js?v=3"></script>
+  <script src="js/store.js?v=3"></script>
+  <script src="js/ui.js?v=3"></script>
+  <script src="js/web.js?v=3"></script>
+</body>
+</html>

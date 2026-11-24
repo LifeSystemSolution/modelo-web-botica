@@ -1,20 +1,69 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-PE" data-theme="light">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sistema para Boticas · Demo</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>LifeFarma · Sistema de botica</title>
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="description" content="Demo del sistema interno de Botica LifeFarma: caja, comprobantes, lotes y vencimientos, compras, recetas y reportes. Datos ficticios.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23e30613'/%3E%3Cpath d='M13 7.5h6v5.5h5.5v6H19v5.5h-6V19H7.5v-6H13z' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css?v=3">
+  <link rel="stylesheet" href="css/app.css?v=3">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('lifefarma-tema')||'light'}catch(e){}</script>
 </head>
 <body>
+  <div id="selector" class="selector" hidden></div>
+
   <div class="app">
-    <header class="topbar" id="topbar"></header>
-    <div class="banner">DEMO con datos de prueba: no emite comprobantes reales ni se conecta a SUNAT.</div>
-    <nav class="side" id="nav" aria-label="Menú"></nav>
-    <main class="main" id="main"></main>
+    <aside class="side">
+      <a class="marca" id="side-logo" href="web.html" aria-label="LifeFarma, ir a la web de la botica"></a>
+      <nav id="nav" class="nav" aria-label="Secciones"></nav>
+      <div class="side-pie">
+        <div class="side-user" id="side-user"></div>
+        <button type="button" class="side-btn" id="btn-salir">Cambiar de rol</button>
+      </div>
+    </aside>
+
+    <div class="main" id="main">
+      <header class="top">
+        <h1 id="titulo">LifeFarma</h1>
+        <div class="top-acc">
+          <a class="top-plan" id="plan-pill" href="index.html#planes" title="Ver y cambiar de plan"></a>
+          <button type="button" class="btn btn-line btn-sm" id="btn-sim" hidden title="Llega un cliente con productos de ejemplo">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>
+            <span>Simular cliente</span>
+          </button>
+          <button type="button" class="btn btn-ghost btn-icon btn-sm hide-m" id="btn-atajos" aria-label="Atajos de teclado">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.5M10 10h.5M14 10h.5M18 10h.5M7 14h10"/></svg>
+          </button>
+          <button type="button" class="btn btn-ghost btn-icon btn-sm" id="btn-tema" aria-label="Cambiar tema"></button>
+        </div>
+      </header>
+      <p class="demo-aviso">Demo con datos ficticios · SUNAT, RENIEC, WhatsApp y pagos con tarjeta simulados</p>
+      <main id="vista" class="vista"></main>
+    </div>
+
+    <nav id="tabbar" class="tabbar" aria-label="Secciones"></nav>
   </div>
-  <div class="modal-bg" id="modal" hidden></div>
-  <div id="toasts" aria-live="polite"></div>
-  <script src="app.js"></script>
+
+  <!-- Orden de carga: íconos → motor → planes → datos → interfaz → módulos → arranque -->
+  <script src="js/icons.js?v=3"></script>
+  <script src="js/motor.js?v=3"></script>
+  <script src="js/planes.js?v=3"></script>
+  <script src="js/seed.js?v=3"></script>
+  <script src="js/store.js?v=3"></script>
+  <script src="js/ui.js?v=3"></script>
+  <script src="js/venta.js?v=3"></script>
+  <script src="js/ventas.js?v=3"></script>
+  <script src="js/caja.js?v=3"></script>
+  <script src="js/productos.js?v=3"></script>
+  <script src="js/inventario.js?v=3"></script>
+  <script src="js/compras.js?v=3"></script>
+  <script src="js/gestion.js?v=3"></script>
+  <script src="js/ajustes.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
 </body>
 </html>
